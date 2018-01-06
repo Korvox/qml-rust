@@ -51,7 +51,7 @@ extern "C" fn create_dobject(id: i32,
     // Returning pointers to a wrapper and to an DosQObject, then swapping DosQObject with a fresh one
     // Comments are copied 'as is' from the DOtherSide docs to ensure correctness
     unsafe {
-        let mut qobj = &mut *shallow.get_qobj_from_ptr(binded);
+        let qobj = &mut *shallow.get_qobj_from_ptr(binded);
         // # Retrieve the DosQObject created dos_qobject_create() inside the nimQObject
         *dosQObject = get_qobj_ptr(qobj);
         // # Store the pointer to the nimQObject
@@ -75,7 +75,7 @@ fn register_with<T: QMLRegisterable + 'static>(t: T, r: Registerer) {
     let (major, minor, uri, qml) = t.qualify_to_register();
     let qmeta = QMetaDefinition::new(t.qmeta());
     let meta = QMeta::new_for_qobject(qmeta);
-    let mut map = unsafe { &mut *(REGISTERED_TYPES.0.get()) };
+    let map = unsafe { &mut *(REGISTERED_TYPES.0.get()) };
 
     let qrt = QmlRegisterType {
         major: major,

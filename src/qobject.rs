@@ -40,12 +40,6 @@ impl Drop for QObject {
     }
 }
 
-macro_rules! QT_connect {
-    ($sender:ident, $signal:ident, $receiver:ident, $method:tt) => {{
-        unimplemented!()
-    }}
-}
-
 /// This enum describes the types of connection that can be used between signals and slots.
 /// In particular, it determines whether a particular signal is delivered to a slot immediately or queued for delivery at a later time.
 pub enum QtConnectionType {
@@ -103,7 +97,7 @@ extern "C" fn callback(obj: *mut libc::c_void,
                        argc: i32,
                        argv: *mut DosQVariant) {
     unsafe {
-        let mut obj: Box<&mut QObjectMacro> = Box::from_raw(obj as *mut &mut QObjectMacro);
+        let obj: Box<&mut QObjectMacro> = Box::from_raw(obj as *mut &mut QObjectMacro);
         // println!("Calling adress of wrapper  {:p}", *obj.as_mut());
         let slice = from_raw_parts_mut(argv, argc as usize);
         let vec: Vec<QVariant> = slice.iter().skip(1).map(|&dq| dq.into()).collect();
